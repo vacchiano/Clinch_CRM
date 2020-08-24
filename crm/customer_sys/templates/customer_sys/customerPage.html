@@ -1,0 +1,113 @@
+{% extends 'customer_sys/base.html' %}
+
+{% block content %}
+
+<!-- Header Area -->
+<div class="row mt-3">
+    <div class="container text-center">
+      <h1>{{ contact.first_name }} {{ contact.last_name }}</h1>
+      <h5><b>Status:</b> {{ contact.status }}</h5>
+      <p><a href="{% url 'customerEdit' contact.id %}">Edit</a></p>
+      <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-2">
+    </div>
+    <div class="col-4 text-center">
+        <p><b>Email: </b>{{ contact.email }}</p>
+        <p><b>Phone: </b>{{ contact.phone }}</p>
+    </div>
+    <div class="col-4 text-center">
+        <p><b>Last Contacted: </b>{{ contact.last_contact }}</p>
+        <p><b>Address: </b>{{ contact.address }}</p>
+    </div>
+    <div class="col-2">
+    </div>
+</div>
+
+<!-- Party TABLE -->
+
+<div class="row mt-5">
+    <div class="container col-5">
+      <div class="row mb-2">
+        <h4>Parties Hosted</h4>
+      </div>
+      
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Party #</th>
+            <th scope="col">Total Sales</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for party in parties_hosted %}
+          <tr>
+            <th scope="row"><a href="{% url 'partyPage' party.id %}">Party #{{ party.id }}</a></th>
+            <td>${{ party.total }}</td>
+            <td>{{ party.start_date|date:"m/d/y"}}</td>
+            <td><a href="#">Edit</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="row mt-4">
+        <h4>Parties Attended</h4>
+      </div>
+      
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Party #</th>
+            <th scope="col">Host</th>
+            <th scope="col">Start Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for party in parties_attended %}
+          <tr>
+            <th scope="row"><a href="{% url 'partyPage' party.id %}">Party #{{ party.id }}</a></th>
+            <td><a href="{% url 'customerPage' party.host.id %}">{{ party.host.first_name }} {{ party.host.last_name }}</a></td>
+            <td>{{ party.start_date|date:"m/d/y"}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="container col-5">
+      <div class="row mb-2">
+        <h4>Customer Notes:</h4>
+      </div>
+
+      <!-- Note Form -->
+      <div class="container">
+        <form action="{% url 'addNote' %}" method="POST">
+        {% load crispy_forms_tags %}
+          {% csrf_token %}
+          <div class="form-group">
+          {{ note_form|crispy }}
+          <input type="hidden" name="contact" value="{{ contact.id }}">
+          <button type="submit" class="btn btn-primary float-right mb-4">Add Note</button>
+        </form>
+      </div>
+
+      {% for note in notes %}
+      <div class="card mb-3" style="width: 100%;">
+        <div class="card-body">
+          <h5 class="card-title">Note From {{ note.created_at|date:"m/d/y" }}</h5>
+          <hr>
+          <p class="card-text">{{ note.body }}</p>
+          <a href="{% url 'deleteNote' note.id contact.id %}" class="card-link">Delete</a>
+        </div>
+      </div>
+      {% endfor %}
+</div>
+</div>
+    </div>
+    </div>
+
+{% endblock %}

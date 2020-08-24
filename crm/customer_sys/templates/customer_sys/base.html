@@ -10,12 +10,12 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'reg_auth/style.css' %}">
 
-    <title>Clinch CRM</title>
+    <title>Clinch CRM Dashboard</title>
   </head>
   <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="{% url 'app' %}">
         <img src="{% static 'reg_auth/images/Clinch_CRM.png' %}" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
         Clinch CRM
       </a>
@@ -25,40 +25,35 @@
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="{% url 'app' %}">Dashboard <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Features</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Pricing</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Add +
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="{% url 'newContact' %}">Add Customer</a>
+              <a class="dropdown-item" href="{% url 'newParty' %}">Add Party</a>
+            </div>
           </li>
         </ul>
         <span>
-          <a href="{% url 'app' %}">Login</a> | <a href="{% url 'register' %}">Register</a> 
+          Hello, {{ request.user.username }} | <a href="/logout">Logout</a> 
         </span>
       </div>
     </nav>
 
     <div class="container">
 
-      
-      <!-- The main home landing screen -->
-      <div class="row mt-5">
-        <div class="container text-center">
-          <h3>Focus on selling, we'll handle the rest</h3>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur, quo.</p>
-          <a href="#" class="btn btn-primary">Learn More</a>
-          <a href="{% url 'register' %}" class="btn btn-success">Try It Free!</a>
-        </div>
-      </div>
-      
-    </div>
+        {% block content %}
+        {% endblock %}
 
+    </div>
+    
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
   </body>
-</html>
+  </html>

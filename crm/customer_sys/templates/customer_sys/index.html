@@ -1,103 +1,83 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% extends 'customer_sys/base.html' %}
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'reg_auth/style.css' %}">
+{% block content %}
 
-    <title>Clinch CRM Dashboard</title>
-  </head>
-  <body>
+<!-- Header Area -->
+<div class="row mt-3">
+<div class="container text-center">
+  <h1>Dashboard</h1>
+  <p>Manage your current customers and parties</p>
+  <hr>
+</div>
+</div>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">
-        <img src="{% static 'reg_auth/images/Clinch_CRM.png' %}" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
-        Clinch CRM
-      </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Dashboard <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Add +
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Add Customer</a>
-              <a class="dropdown-item" href="#">Add Party</a>
-            </div>
-          </li>
-        </ul>
-        <span>
-          Hello, {{ request.user.username }} | <a href="/logout">Logout</a> 
-        </span>
-      </div>
-    </nav>
+<!-- CUSTOMER TABLE -->
 
-    <!-- The main page Area -->
-    <div class="row mt-3">
-      <div class="container text-center">
-        <h1>Dashboard</h1>
-        <p>Manage your current customers and parties</p>
-        <hr>
-      </div>
-    </div>
+<div class="row mb-4">
+<div class="container">
+  <div class="row mb-2">
+    <h3>Customers</h3>
+    <a href="{% url 'newContact' %}" class="btn btn-lg btn btn-outline-primary ml-auto">Add Customer</a>
+  </div>
+  
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Status</th>
+        <th scope="col">Last Contacted</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for contact in contacts %}
+      <tr>
+        <th scope="row"><a href="{% url 'customerPage' contact.id %}">{{ contact.first_name }} {{ contact.last_name }}</a></th>
+        <td>{{ contact.email }}</td>
+        <td>{{ contact.status }}</td>
+        <td>{{ contact.last_contact }}</td>
+        <td><a href="{% url 'customerEdit' contact.id %}">Edit</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <hr>
+</div>
+</div>
 
-    <!-- CUSTOMER TABLE -->
-    
-    <div class="row">
-      <div class="container">
-        <div class="row mb-2">
-            <h3>Contacts</h3>
-            <button class="btn btn-primary btn-sm ml-auto">Add Contact +</button>
-        </div>
+<!-- Party TABLE -->
 
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
-              <th scope="col">Handle</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td colspan="2">Larry the Bird</td>
-              <td>@twitter</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+<div class="row">
+<div class="container">
+  <div class="row mb-2">
+    <h3>Parties</h3>
+    <a href="{% url 'newParty' %}" class="btn btn-lg btn-outline-primary ml-auto">Add Party</a>
+  </div>
+  
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Party #</th>
+        <th scope="col">Host</th>
+        <th scope="col">Total Sales</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for party in parties %}
+      <tr>
+        <th scope="row"><a href="{% url 'partyPage' party.id %}">Party #{{ party.id }}</a></th>
+        <td><a href="{% url 'customerPage' party.host.id %}">{{ party.host.first_name }} {{ party.host.last_name }}</a></td>
+        <td>${{ party.total }}</td>
+        <td>{{ party.start_date|date:"m/d/y"}}</td>
+        <td><a href="{% url 'partyEdit' party.id %}">Edit</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+</div>
 
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-  </body>
-</html>
+{% endblock %}

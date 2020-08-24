@@ -1,0 +1,69 @@
+{% extends 'customer_sys/base.html' %}
+
+{% block content %}
+
+<!-- Header Area -->
+<div class="row mt-3">
+    <div class="container text-center">
+      <h1>Party #{{ party.id }}</h1>
+      <h5><b>Total Sales: </b>${{ party.total }}</h5>
+      <p><a href="{% url 'partyEdit' party.id %}">Edit</a></p>
+      <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-2">
+    </div>
+    <div class="col-4 text-center">
+        <p><b>Start Date: </b>{{ party.start_date|date:"m/d/y" }}</p>
+    </div>
+    <div class="col-4 text-center">
+        <p><b>Host: </b><a href="{% url 'customerPage' party.host.id %}">{{ party.host.first_name }} {{ party.host.last_name }}</a></p>
+    </div>
+    <div class="col-2">
+    </div>
+</div>
+
+<div class="row">
+    <div class="container text-center">
+        <p><b>URL Link: </b><a {% if party.url != null %} href="{{ party.url }}" target="blank {% else %} href="#" {% endif %}">View FaceBook Party</a></p>
+    </div>
+</div>
+
+<!-- Party TABLE -->
+
+<div class="row mt-5">
+    <div class="container col-11">
+      <div class="row mb-2">
+        <h4>Guests Attending</h4>
+        <a href="{% url 'newContact' %}" class="btn btn-lg btn-outline-primary ml-auto">Add Guest</a>
+      </div>
+      
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Status</th>
+            <th scope="col">Last Contacted</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for guest in guests %}
+          <tr>
+            <th scope="row"><a href="{% url 'customerPage' guest.id %}">{{ guest.first_name }} {{ guest.last_name }}</a></th>
+            <td>{{ guest.email }}</td>
+            <td>{{ guest.status }}</td>
+            <td>{{ guest.last_contact }}</td>
+            <td><a href="{% url 'customerEdit' guest.id %}">Edit</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    </div>
+
+
+{% endblock %}
